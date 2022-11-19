@@ -1,0 +1,15 @@
+timestamp,model_name,total_packets,query_rate_flagged,whitelist_passed,blacklist_flagged,dga_flagged,dga_passed,ml_passed,ml_flagged
+2022_09_19-09:13:31_PM,undefined,4,0,0,0,0,0,4,0
+
+
+
+
+
+140.00133399999993,24.88533400000037,30.980709000000495,32.53745899999849
+
+
+
+
+octocloud.net,octocloud.net,octocloud.net,octocloud.net
+
+

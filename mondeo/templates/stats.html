@@ -1,0 +1,104 @@
+<head>
+    <title> Current Statistics </title>
+    <link rel="icon" type="image/png" href="/figs/logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <h1 class="display-1 text-center" >Statistics</h1>
+    <div class="text-center">
+        <form action="/check_stats" method="get">
+            <button name="forwardBtn" type="submit" class="btn btn-primary">Refresh</button>
+        </form>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Property</th>
+                <th scope="col">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Total Packets Analyzed</td>
+                <td>{{stats['total_packets']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Total Packets DNS</td>
+                <td>{{stats['total_packets_dns']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Total Packets HTTP</td>
+                <td>{{stats['total_packets_http']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>Passed Packets DNS</td>
+                <td>{{stats['passed_packets_dns']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>Flagged Packets DNS</td>
+                <td>{{stats['flagged_packets_dns']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td>Passed packets HTTP </td>
+                <td>{{stats['passed_packets_http']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">7</th>
+                <td>Flagged packets HTTP</td>
+                <td>{{stats['flagged_packets_http']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">8</th>
+                <td>Flagged by query rate</td>
+                <td>{{stats['flagged_by_query_rate']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">9</th>
+                <td>Flagged by Blacklist</td>
+                <td>{{stats['flagged_by_blacklist']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">10</th>
+                <td>Passed by Whitelist</td>
+                <td>{{stats['passed_by_whitelist']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">11</th>
+                <td>Flagged by DGA Calculation</td>
+                <td>{{stats['flagged_by_dga_calc']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">12</th>
+                <td>Passed by DGA Calculation</td>
+                <td>{{stats['passed_by_dga_calc']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">13</th>
+                <td>Flagged by Machine Learning</td>
+                <td>{{stats['flagged_by_ml']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">14</th>
+                <td>Passed by Machine Learning</td>
+                <td>{{stats['passed_by_ml']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">15</th>
+                <td>Flagged by HTTP Eval</td>
+                <td>{{stats['flagged_by_http_eval']}}</td>
+              </tr>
+              <tr>
+                <th scope="row">16</th>
+                <td>Passed by HTTP Eval</td>
+                <td>{{stats['passed_by_http_eval']}}</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>  
+</body>

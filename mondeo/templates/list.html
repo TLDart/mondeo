@@ -1,0 +1,16 @@
+<head>
+    <title> Files Available For Download </title>
+    <link rel="icon" type="image/png" href="/figs/logo.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <h1 class="display-1 text-center" >Files available for Download</h1>
+    <div class="text-center">
+    <p> To Download a file you can cilck the button directly by get request using '?file=&ltfilename&gt' </p>
+        {% for file in files %}
+            <a href="/download?file={{file}}" class="btn btn-primary" > {{file}}</a>
+            <br>
+            <br>
+        {% endfor %}
+    </div>
+</body>
