@@ -120,7 +120,7 @@ class StatCounter:
             self.time_http_pass_list.append(time)
 
         if self.time_attributer == 'http_flag': #http Query
-            self.time_http_pass_list.append(time)
+            self.time_http_flag_list.append(time)
         self.reset_attribution()
         
         return

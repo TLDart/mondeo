@@ -118,9 +118,10 @@ def get_all_stats():
 
 @app.route('/analyze_http', methods=['POST'])
 def parse_http():
+    packet = request.json
     if debug_level == True:
         logger.info('Received HTTP Request')
-    packet = request.json
+        logger.info(packet)
     if verify_packet_format_http(packet) == True:
         result = traffic.analyze_http(packet)
         return gen_response(result['value'], result['domain'], result['source'])
@@ -132,9 +133,10 @@ def parse_http():
 
 @app.route('/analyze_dns', methods= ['POST'])
 def parse_packet():
+    packet = request.json
     if debug_level == True:
         logger.info('Receive DNS Request')
-    packet = request.json
+        logger.info(packet)
     if verify_packet_format_dns(packet) == True:
         result = traffic.analyze_dns(packet)
         return gen_response(result['value'], result['domain'], result['source'])
@@ -181,8 +183,12 @@ def verify_packet_format_http(packet):
         assert(type(packet['destination']) == int)
         assert(type(packet['timestamp']) == int)
         assert(type(packet['domain']) == str)
+        if debug_level == True:
+            logger.info('Parsed HTTP request sucessfully')
         return True
     except:
+        if debug_level == True:
+            logger.info('Failed to parse HTTP request')
         return False
 
 def verify_packet_format_dns(packet):
@@ -195,10 +201,13 @@ def verify_packet_format_dns(packet):
         assert(type(packet['queries_null']) == int)
         assert(type(packet['timestamp']) == int)
         assert(type(packet['domain']) == str)
+        if debug_level == True:
+            logger.info('Parsed DNS request sucessfully')
         return True
     except Exception as e:
         if debug_level == True:
-            return False
+            logger.info('Failed to parse DNS request')
+        return False
 
 #Other
 def parse_config(path):

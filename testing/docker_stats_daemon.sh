@@ -1,0 +1,2 @@
+while true; do docker stats --no-stream $1 --format \
+    "{\"container\":\"{{ .Container }}\",\"memory\":{\"raw\":\"{{ .MemUsage }}\",\"percent\":\"{{ .MemPerc }}\"},\"cpu\":\"{{ .CPUPerc }}\"}" | tee -ai $1.txt; sleep 1; done

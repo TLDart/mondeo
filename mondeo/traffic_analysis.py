@@ -96,19 +96,18 @@ class TrafficAnalyzer:
         timestamp = int(packet['timestamp'])
         domain = packet['domain']
         
-        if destination in self.infected_devices:
-            #print(domain)
-            if self.infected_devices[destination] < timestamp + self.config.time_tresh:
+        if source in self.infected_devices:
+            if self.infected_devices[source] < timestamp + self.config.time_tresh:
                 dga_prob = dgaintel.get_prob(domain)
                 if dga_prob >= self.config.dga_detection_sensitivity_upper:
                     self.stats.time_attributer = 'http_flag'
-                    result.set_all(1, domain, source)
+                    result.set_all(1, domain, destination)
                     return
             else:
-                self.infected_devices.pop(destination)
+                self.infected_devices.pop(source)
 
         self.stats.time_attributer = 'http_pass'
-        result.set_all(0, domain, source) #If it not in the possibly infected list, ignore
+        result.set_all(0, domain, destination) #If it not in the possibly infected list, ignore
         return
 
     def _analyze_dns(self, packet, result):

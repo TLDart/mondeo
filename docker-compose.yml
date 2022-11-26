@@ -4,10 +4,9 @@ services:
     build:
       context: ./mondeo
       dockerfile: Dockerfile
-    #command: 'python main.py'
     expose:
       - "5002"
     ports:
       - "5002:5002"
     volumes:
-      - .:/app
+      - ./mondeo:/app
