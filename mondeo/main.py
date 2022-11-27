@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 #### Global Variables ####
 # Check config parser
 UPLOAD_FOLDER = 'uploads/'
-ALLOWED_EXTENSIONS = {'csv'}
+ALLOWED_EXTENSIONS = {'json'}
 traffic = TrafficAnalyzer('configs/traffic_config.ini')
 
 ## FLASK ##
@@ -91,9 +91,16 @@ def download():
     return render_template('list.html', files=files)
 
 ##REST Endpoints
+@app.route('/toggle_retroactive', methods= ['GET'])
+def toggle_retroactive():
+    traffic.config.retroactive_list = not traffic.config.retroactive_list
+    return jsonify({
+            "code": 200, 
+            "current_retroactive_value":  traffic.config.retroactive_list}) 
+
 @app.route('/save_stats', methods = ['GET'])
 def save_stats():
-    filename = './outputs/' + 'packet_logs_' + str(datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")) + '.csv'
+    filename = './outputs/' + 'packet_logs_' + str(datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")) + '.json'
     res = traffic.stats.save_stats(filename)
     if res == True:
         return jsonify({"code": "200", "success": True, "filename": filename})

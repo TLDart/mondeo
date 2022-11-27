@@ -1,3 +1,4 @@
+## Converts pcacpng packets into json format with the required format ##
 import pyshark, json
 from datetime import datetime
 
@@ -39,8 +40,9 @@ def parse_capture(capture):
 
 
 if __name__ == '__main__':
-    folder = 'pcaps'
-    files = ['cap_115_125']
+    folder = 'pcaps_aida_uc_only'
+    #files = ['20201022_pcap_6a1e14-Correos', 'cap_00083_20220708143201','cap_00125_20220714125927','cap_00023_20220506232010',' cap_00108_20220713093249', 'cap_00240_20220728121552']
+    files = ['cap_00108_20220713093249', 'cap_00240_20220728121552']
     for file in files:
         cap = pyshark.FileCapture(f'{folder}/{file}.pcapng', display_filter='(http && tcp.port == 80 && http.request.method == "POST") or (dns and dns.flags.response == 0)')
         res = parse_capture(cap)

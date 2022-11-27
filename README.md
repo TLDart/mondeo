@@ -20,42 +20,47 @@
     - [WebUI](#webui)
       - [Main Menu](#main-menu)
       - [filelist](#filelist)
-      - [check_stats](#check_stats)
+      - [check\_stats](#check_stats)
       - [Upload](#upload)
     - [Endpoints](#endpoints)
-      - [save_stats](#save_stats)
+      - [save\_stats](#save_stats)
         - [Method : GET](#method--get)
         - [Description](#description)
         - [Response](#response)
           - [Success](#success)
           - [Failure](#failure)
-      - [stats_time](#stats_time)
+      - [toggle\_retroactive](#toggle_retroactive)
         - [Method : GET](#method--get-1)
-          - [Return](#return)
-      - [stats_eval](#stats_eval)
+        - [Description](#description-1)
+        - [Response](#response-1)
+          - [Success](#success-1)
+      - [stats\_time](#stats_time)
         - [Method : GET](#method--get-2)
-          - [Return](#return-1)
-      - [stats_domain](#stats_domain)
+          - [Return](#return)
+      - [stats\_eval](#stats_eval)
         - [Method : GET](#method--get-3)
-          - [Return](#return-2)
-      - [all_stats](#all_stats)
+          - [Return](#return-1)
+      - [stats\_domain](#stats_domain)
         - [Method : GET](#method--get-4)
+          - [Return](#return-2)
+      - [all\_stats](#all_stats)
+        - [Method : GET](#method--get-5)
           - [Return](#return-3)
-      - [analyze_dns](#analyze_dns)
+      - [analyze\_dns](#analyze_dns)
         - [Method : POST](#method--post)
         - [Input (JSON format)](#input-json-format)
           - [Example](#example)
-        - [Response](#response-1)
-          - [Success](#success-1)
+        - [Response](#response-2)
+          - [Success](#success-2)
           - [Example](#example-1)
           - [Failure](#failure-1)
           - [Example](#example-2)
-      - [analyze_http](#analyze_http)
+      - [analyze\_http](#analyze_http)
         - [Methods : POST](#methods--post)
         - [Input (JSON format)](#input-json-format-1)
         - [Example](#example-3)
-        - [Response](#response-2)
-          - [Success](#success-2)
+        - [Response](#response-3)
+          - [Success](#success-3)
           - [Example](#example-4)
           - [Failure](#failure-2)
           - [Example](#example-5)
@@ -206,6 +211,20 @@ Saves the stats into a file
  "filename": None
  }
 ```
+
+#### toggle_retroactive
+##### Method : GET
+##### Description
+Change the retroactive property in the system configs
+##### Response
+###### Success
+```json
+{
+ "code": "200",
+ "current_retroactive_value": Boolean, 
+ }
+```
+
 #### stats_time
 ##### Method : GET
 Retrieves the time stats in json format

@@ -1,5 +1,5 @@
 from datetime import datetime
-import numpy as np
+import numpy as np, json
 
 class StatCounter:
 
@@ -42,8 +42,8 @@ class StatCounter:
         self.time_attributer = ''
         return True
 
-    def __repr__(self):#TODO fix repr and Load
-        return self.print_stats()
+    def __repr__(self):
+        return self.eval_to_json()
 
     #Packet numbers
     def total_packets(self):
@@ -187,102 +187,85 @@ class StatCounter:
     def get_all_stats(self):
         return self.dict_merge(self.domains_to_json(), self.dict_merge(self.time_to_json(), self.eval_to_json()))
 
-    def save_stats(self, path):
+    def save_stats(self, path): 
         try:
-            with open(path, 'w') as f:
-                #Header
-                f.write(','.join(['timestamp', 'model_name', 'total_packets', 'total_packets_dns', 'total_packets_http','passed_packets_dns', 'flagged_packets_dns', 'passed_packets_http', 'flagged_packets_http' 'query_rate_flagged', 'whitelist_passed', 'blacklist_flagged', 'dga_flagged', 'dga_passed', 'ml_flagged', 'ml_passed']))
-                f.write('\n')
-                #General Info
-                data = [str(datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")), self.model_name, str(self.total_packets()), str(self.total_packets_dns()), str(self.total_packets_http()), str(self.passed_packets_dns()), str(self.flagged_packets_dns()), str(self.passed_packets_http()), str(self.flagged_packets_http()), str(len(self.time_query_ratio_list)), str(len(self.time_whitelist_list)), str(len(self.time_blacklist_list)), str(len(self.time_dga_flag_list)), str(len(self.time_dga_pass_list)), str(len(self.time_ml_flag_list)), str(len(self.time_ml_pass_list))]
-                f.write(','.join(data))
-                f.write('\n')
-                #Write the lists down
-                f.write(','.join(list(map(str, self.time_whitelist_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_blacklist_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_query_ratio_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_dga_flag_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_dga_pass_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_ml_flag_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_ml_pass_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_http_pass_list))))
-                f.write('\n')
-                f.write(','.join(list(map(str, self.time_http_flag_list))))
-                f.write('\n')
-                #Domains
-                f.write(','.join(self.whitelist_domains))
-                f.write('\n')
-                f.write(','.join(self.blacklist_domains))
-                f.write('\n')
-                f.write(','.join(self.query_rate_flag_domains))
-                f.write('\n')
-                f.write(','.join(self.dga_flagged_domains))
-                f.write('\n')
-                f.write(','.join(self.dga_passed_domains))
-                f.write('\n')
-                f.write(','.join(self.ai_flagged_domains))
-                f.write('\n')
-                f.write(','.join(self.ai_passed_domains))
-                f.write('\n')
-                f.write(','.join(self.http_passed_domains))
-                f.write('\n')
-                f.write(','.join(self.http_flagged_domains))
-            return True
+            data = {'timestamp' : str(datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")),
+                    'model_name' : self.model_name,
+                    'total_packets': self.total_packets(),
+                    'total_packets_dns': self.total_packets_dns(),
+                    'total_packets_http': self.total_packets_http(),
+                    'passed_packets_dns': self.passed_packets_dns(),
+                    'flagged_packets_dns': self.flagged_packets_dns(),
+                    'passed_packets_http': self.passed_packets_http(),
+                    'flagged_packets_http': self.flagged_packets_http(),
+                    'query_rate_flagged': len(self.time_query_ratio_list),
+                    'whitelist_passed': len(self.time_whitelist_list),
+                    'blacklist_flagged': len(self.time_blacklist_list),
+                    'dga_flagged': len(self.time_dga_flag_list),
+                    'dga_passed': len(self.time_dga_pass_list),
+                    'ml_passed': len(self.time_ml_flag_list),
+                    'ml_flagged': len(self.time_ml_pass_list),
+                    'time': {
+                        'whitelist': self.time_whitelist_list,
+                        'blacklist': self.time_blacklist_list,
+                        'query_rate': self.time_query_ratio_list,
+                        'dga_flag': self.time_dga_flag_list,
+                        'dga_pass': self.time_dga_pass_list,
+                        'ml_flag': self.time_ml_flag_list,
+                        'ml_pass': self.time_ml_pass_list,
+                        'http_pass': self.time_http_pass_list,
+                        'http_flag': self.time_http_flag_list
+                    },
+                    'domains': {
+                        'whitelist': self.whitelist_domains,
+                        'blacklist': self.blacklist_domains,
+                        'query_rate': self.query_rate_flag_domains,
+                        'dga_flag': self.dga_flagged_domains,
+                        'dga_pass': self.dga_passed_domains,
+                        'ml_flag': self.ai_flagged_domains,
+                        'ml_pass': self.ai_passed_domains,
+                        'http_pass': self.http_passed_domains,
+                        'http_flag': self.http_flagged_domains
+                    },
+        }
+
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+                return True
         except Exception as e:
             print(e)        
             return False
 
     def load_stats(self, path):
-        res = False
         try:
-            with open(path, 'r') as f: #TODO: FINISH LOAD ALL STATS
-                data = f.readlines()
-                print(len(data))
+            with open(path, 'r', encoding='utf-8') as f:
+                data = json.load(f) 
                 #General Information
-                info = data[1].split(',') 
-                self.model = info[1]
-                self.total = int(info[2])
-                self.total_dns = int(info[3])
-                self.total_http = int(info[4])
+                self.model = data['model_name']
+                self.total = data['total_packets']
+                self.total_dns = data['total_packets_dns']
+                self.total_http = data['total_packets_http']
                 #Time information
-                self.time_whitelist_list = [element for element in data[2].split(',')]
-                self.time_blacklist_list = [element for element in data[3].split(',')]
-                self.time_query_ratio_list = [element for element in data[4].split(',')]
-                self.time_dga_flag_list = [element for element in data[5].split(',')]
-                self.time_dga_pass_list = [element for element in data[6].split(',')]
-                self.time_ml_flag_list = [element for element in data[7].split(',')]
-                self.time_ml_pass_list = [element for element in data[8].split(',')]
-                self.time_http_pass_list = [element for element in data[9].split(',')]
-                self.time_http_flag_list = [element for element in data[10].split(',')]
+                self.time_whitelist_list = data['time']['whitelist']
+                self.time_blacklist_list = data['time']['blacklist']
+                self.time_query_ratio_list = data['time']['query_rate']
+                self.time_dga_flag_list = data['time']['dga_flag']
+                self.time_dga_pass_list = data['time']['dga_pass']
+                self.time_ml_flag_list = data['time']['ml_flag']
+                self.time_ml_pass_list = data['time']['ml_pass']
+                self.time_http_flag_list = data['time']['http_flag']
+                self.time_http_pass_list = data['time']['http_pass']
 
-                ##Convert to float
-                self.time_whitelist_list = [] if self.time_whitelist_list == ['\n'] else list(map(float, self.time_whitelist_list))
-                self.time_blacklist_list = [] if self.time_blacklist_list == ['\n']  else list(map(float, self.time_blacklist_list))
-                self.time_query_ratio_list = [] if self.time_query_ratio_list == ['\n'] else list(map(float, self.time_query_ratio_list))
-                self.time_dga_flag_list = [] if self.time_dga_flag_list == ['\n'] else list(map(float, self.time_dga_flag_list))
-                self.time_dga_pass_list = [] if self.time_dga_pass_list == ['\n'] else list(map(float, self.time_dga_pass_list))
-                self.time_ml_flag_list = [] if self.time_ml_flag_list == ['\n'] else list(map(float, self.time_ml_flag_list))
-                self.time_ml_pass_list = [] if self.time_ml_pass_list == ['\n'] else list(map(float, self.time_ml_pass_list))
-                self.time_http_pass_list = [] if self.time_http_pass_list == ['\n'] else list(map(float, self.time_http_pass_list))
-                self.time_http_flag_list = [] if self.time_http_flag_list == ['\n'] else list(map(float, self.time_http_flag_list))
                 #Domain information
-                self.whitelist_domains = [element for element in data[11].split(',')]
-                self.blacklist_domains= [element for element in data[12].split(',')]
-                self.query_rate_flag_domains = [element for element in data[13].split(',')]
-                self.dga_flagged_domains = [element for element in data[14].split(',')]
-                self.dga_passed_domains = [element for element in data[15].split(',')]
-                self.ai_flagged_domains = [element for element in data[16].split(',')]
-                self.ai_passed_domains = [element for element in data[17].split(',')]
-                self.http_passed_domains = [element for element in data[18].split(',')]
-                self.http_flagged_domains = [element for element in data[19].split(',')]
-            #print(self.__repr__())
+                self.whitelist_domains = data['domains']['whitelist']
+                self.blacklist_domains= data['domains']['blacklist']
+                self.query_rate_flag_domains = data['domains']['query_rate']
+                self.dga_flagged_domains = data['domains']['dga_flag']
+                self.dga_passed_domains = data['domains']['dga_pass']
+                self.ai_flagged_domains = data['domains']['ml_flag']
+                self.ai_passed_domains = data['domains']['ml_pass']
+                self.http_flagged_domains = data['domains']['http_flag']
+                self.http_passed_domains = data['domains']['http_pass']
             return True
         except Exception as e:
             print(e)
