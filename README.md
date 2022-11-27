@@ -163,7 +163,7 @@ From this packet we extract several features:
 
 #### Pipeline Analysis
 There are 3 core assertions that must be made before to confirm whether a IP is a possible C2 server:
-* The destination (devices), must be in the infected list (which he enter by having any DNS query previously flagged);
+* The source(device), must be in the infected list (which he enter by having any DNS query previously flagged);
 * The query must be within a $time \Delta$ (defined in config);
 * The query URI must be considered dga generated (dga evaluation must surpass the default config value).
 
