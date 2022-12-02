@@ -164,7 +164,10 @@ class TrafficAnalyzer:
             self.update_infected_list(source, timestamp)
             ##
             if self.config.retroactive_list:
-                fld = tld.get_fld(domain, fix_protocol=True)
+                try:
+                    fld = tld.get_fld(domain, fix_protocol=True)
+                except:
+                    fld = domain
                 self.blacklist.append(fld)   #TODO: CHECK FOR DUPLICATES (EFFICIENTLY)
             result.set_all(dga_prob, domain, source)
             return 
@@ -175,7 +178,10 @@ class TrafficAnalyzer:
             self.stats.time_attributer= 'dga_pass'
             ##
             if self.config.retroactive_list:
-                fld = tld.get_fld(domain, fix_protocol=True)
+                try:
+                    fld = tld.get_fld(domain, fix_protocol=True)
+                except:
+                    fld = domain
                 self.whitelist.append(fld)
             result.set_all(self.config.val_pass, domain, source)
             return 
