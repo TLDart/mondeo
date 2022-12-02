@@ -1,0 +1,41 @@
+{
+    "total": 3,
+    "data": [
+        {
+            "timestamp": "2022-12-02T12:39:23.495480978Z",
+            "cpu_usage": 135.8149152542373,
+            "memory_usage": 347172864,
+            "memory_limit": 8335175680,
+            "memory_pct": 4.16515352919352,
+            "net_input": 3279,
+            "net_output": 248,
+            "block_input": 0,
+            "block_output": 0,
+            "pid": 20
+        },
+        {
+            "timestamp": "2022-12-02T12:39:25.50987399Z",
+            "cpu_usage": 108.03279569892472,
+            "memory_usage": 462114816,
+            "memory_limit": 8335175680,
+            "memory_pct": 5.544152081987071,
+            "net_input": 6671,
+            "net_output": 2328,
+            "block_input": 0,
+            "block_output": 0,
+            "pid": 34
+        },
+        {
+            "timestamp": "2022-12-02T12:39:27.517977903Z",
+            "cpu_usage": 31.287956989247313,
+            "memory_usage": 463003648,
+            "memory_limit": 8335175680,
+            "memory_pct": 5.55481570845547,
+            "net_input": 80440,
+            "net_output": 60347,
+            "block_input": 0,
+            "block_output": 0,
+            "pid": 33
+        }
+    ]
+}

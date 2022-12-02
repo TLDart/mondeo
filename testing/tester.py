@@ -8,9 +8,10 @@ BASE_URL = f"http://localhost:{PORT}"
 HTTP_ENDPOINT = f"{BASE_URL}/analyze_http"
 DNS_ENDPOINT = f"{BASE_URL}/analyze_dns"
 ALL_STATS_ENDPOINT = f"{BASE_URL}/all_stats"
-CONTAINER_NAME = 'mondeo-backend-1'
-FOLDER = 'pcaps_aida_uc_only'
-FILELIST = ['20221104-6a1e14-Correos', '20221104-7f5f95-FedEx']
+CONTAINER_NAME = 'mondeo_backend_1'
+FOLDER = 'pcaps_aida_mondeo'
+#FILELIST = ['20221104-6a1e14-Correos', '20221104-7f5f95-FedEx','20221104-686cfdd-UPS','20221104-35427f-DHL','20221104-edf4b-VoiceMail','20221104-xxxx-FedEx','cap_00023_20220506232010']
+FILELIST = ['cap_115_125']
 results = {}
 stop = False
 
@@ -65,12 +66,13 @@ if __name__ == '__main__':
     cli = docker.from_env()
     container = cli.containers.get(CONTAINER_NAME)
     container.stop()
-    time.sleep(3)
+    time.sleep(7)
     for file in FILELIST:
+        print(f'PARSING FILE {file}')
         stop = False
         results = {'total': 0, 'data': []}
         container.start()
-        time.sleep(3)
+        time.sleep(7)
         #Measure the container
         thread = Thread(target=measure_container, args=(container,)) 
         thread.start()
