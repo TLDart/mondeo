@@ -1,4 +1,4 @@
-import configparser, timeit, dgaintel, tld, pandas as pd, pickle
+import configparser, timeit, dgaintel, dgad, tld, pandas as pd, pickle
 from traffic_stats import StatCounter
 
 class TrafficAnalyzer:
@@ -30,6 +30,7 @@ class TrafficAnalyzer:
                 self.dga_detection_sensitivity_lower = float(self.config['PARAMETERS']['DGASensitivityLower'])
                 self.time_tresh = int(self.config['PARAMETERS']['HTTPTimeTresh'])
                 self.retroactive_list = True if self.config['PARAMETERS']['RetroactiveList'] == 'True' else False
+                self.dga_method = self.config['PARAMETERS']['DgaMethod']
 
                 ##Atributing Values
                 self.val_pass = float(self.config['FLAG LEVELS']['Pass'])
@@ -56,6 +57,8 @@ class TrafficAnalyzer:
             self.database = {} #database contains a IP : [Counter, Last_msg_timing]-> Used in Query Rate Mechanism
             self.infected_devices = {}
             self.stats = StatCounter()
+            self.stats.dga_name = self.config.dga_method
+            self.stats.model_name = self.config.ai_model_path
             return True
         except Exception as e:
             if self.debug:
@@ -156,7 +159,10 @@ class TrafficAnalyzer:
 
 
         ##Cond2 Simple DGA_value
-        dga_prob = dgaintel.get_prob(domain)
+
+        dga_prob = self.get_dga_prob(domain)
+        
+        
         if(dga_prob > self.config.dga_detection_sensitivity_upper): #Most likely a DGA domain
             ##Stats
             self.stats.dga_flagged_domains.append(domain)
@@ -236,3 +242,17 @@ class TrafficAnalyzer:
         timestamp = int(timestamp)
         self.infected_devices[infected_source] = timestamp
         return
+
+    def get_dga_prob(self,domain):
+        dir(dgad)
+        if self.config.dga_method == 'dgad':
+            detective = Detective()
+            res, _ = detective.prepare_domains([domain])
+            detective.investigate(res)
+            print(res[0].words[0].binary_score)
+            return res[0].words[0].binary_score
+        
+            
+        else:
+            return dgaintel.get_prob(domain)
+        

@@ -96,7 +96,16 @@ def toggle_retroactive():
     traffic.config.retroactive_list = not traffic.config.retroactive_list
     return jsonify({
             "code": 200, 
-            "current_retroactive_value":  traffic.config.retroactive_list}) 
+            "current_retroactive_value":  traffic.config.retroactive_list})
+
+@app.route('/select_dga_detector', methods= ['POST'])
+def select_dga_detector():
+    packet = request.json
+    traffic.config.dga_method = packet['dga_method']
+    return jsonify({
+            "code": 200, 
+            "current_retroactive_value":  traffic.config.dga_method})
+
 
 @app.route('/save_stats', methods = ['GET'])
 def save_stats():

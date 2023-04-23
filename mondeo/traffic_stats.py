@@ -1,5 +1,8 @@
 from datetime import datetime
 import numpy as np, json
+from enum import Enum
+
+Dga_name = Enum('Dga_name', ['dga_intel', 'dgad'])
 
 class StatCounter:
 
@@ -13,6 +16,7 @@ class StatCounter:
     def reset_stats(self):
         #Model Name and info
         self.model_name = 'undefined'
+        self.dga_name = 'undefined'
         self.total = 0
         self.total_dns = 0
         self.total_http = 0
@@ -191,6 +195,7 @@ class StatCounter:
         try:
             data = {'timestamp' : str(datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")),
                     'model_name' : self.model_name,
+                    'dga_detector': self.config.dga_method,
                     'total_packets': self.total_packets(),
                     'total_packets_dns': self.total_packets_dns(),
                     'total_packets_http': self.total_packets_http(),

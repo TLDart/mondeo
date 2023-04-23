@@ -6,7 +6,10 @@ services:
       dockerfile: Dockerfile
     expose:
       - "5002"
+    environment:
+      FLASK_DEBUG: "on"
+      FLASK_APP: ./main.py
     ports:
       - "5002:5002"
     volumes:
-      - ./mondeo:/app
+      - ./mondeo:/mondeo
